@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "Arduino",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/libraries/**",
+                "C:/Users/VuQuan/AppData/Local/Arduino15/libraries/**"
+            ],
+            "defines": ["ARDUINO=10805", "ARDUINO_ARCH_AVR", "ARDUINO_AVR_UNO"],
+            "intelliSenseMode": "msvc-x64",
+            "browse": {
+                "path": ["C:/Users/VuQuan/AppData/Local/Arduino15/libraries/Arduino_BuiltIn/src"]
+            }
+        }
+    ],
+    "version": 4
+}
