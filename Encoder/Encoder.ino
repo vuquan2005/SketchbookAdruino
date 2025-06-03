@@ -1,3 +1,5 @@
+#include <LiquidCrystal_I2C.h>
+
 #define PIN_A 2  // Xanh
 #define PIN_B 3  // Trắng
 
@@ -11,6 +13,8 @@ float vanToc = 0;
 long lastPosition = 0;
 const int delayTime = 500;
 
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
 void setup() {
     // Cấu hình chân
     pinMode(PIN_A, INPUT_PULLUP);
@@ -19,10 +23,18 @@ void setup() {
     attachInterrupt(digitalPinToInterrupt(PIN_A), readEncoder, CHANGE);
 
     Serial.begin(9600);
+
+    lcd.init();
+    lcd.backlight();
+
+    lcd.setCursor(0, 0);
+    lcd.print("So vong: ");
+	lcd.setCursor(0, 1);
+	lcd.print("Van toc: ");
 }
 
 void loop() {
-    vongQuay = position / motVongQuay;
+    vongQuay = position / (float)motVongQuay;
 
     float vongQuayThayDoi = (position - lastPosition) / (float)motVongQuay;
     vanToc = (vongQuayThayDoi / (delayTime / 60000.0));
@@ -37,6 +49,11 @@ void loop() {
 
     Serial.print("Position: ");
     Serial.println(position);
+
+	lcd.setCursor(9, 0);
+	lcd.print(vongQuay);
+	lcd.setCursor(9, 1);
+	lcd.print(vanToc, 2);
 
     lastPosition = position;
     delay(delayTime);
