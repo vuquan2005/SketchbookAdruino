@@ -1,58 +1,68 @@
-#include <LiquidCrystal_I2C.h>
+#define PIN_A 2  // Xanh
+#define PIN_B 3  // Trắng
 
-// Biến lưu trữ giá trị encoder
-volatile int encoderValue = 0;
+volatile long position = 0;
+int lastA = LOW;
 
-// Các chân kết nối
-const int pinA = 2; // Chân A nối vào interrupt
-const int pinB = 3; // Chân B
+int motVongQuay = 800;
+float vongQuay = 0;
 
-// Biến trạng thái trước đó của chân A
-int lastEncoded = 0;
-int vanToc = 0;
+float vanToc = 0;
+long lastPosition = 0;
+const int delayTime = 500;
 
-LiquidCrystal_I2C lcd(0x27, 16, 2);
+void setup() {
+    // Cấu hình chân
+    pinMode(PIN_A, INPUT_PULLUP);
+    pinMode(PIN_B, INPUT_PULLUP);
 
-void setup()
-{
-	pinMode(pinA, INPUT_PULLUP);
-	pinMode(pinB, INPUT_PULLUP);
-	attachInterrupt(digitalPinToInterrupt(pinA), updateEncoder, CHANGE);
-	Serial.begin(9600);
+    attachInterrupt(digitalPinToInterrupt(PIN_A), readEncoder, CHANGE);
 
-	lcd.init();
-	lcd.backlight();
+    Serial.begin(9600);
 }
 
-void loop()
-{
-	// In giá trị encoder
-	vanToc = (encoderValue - lastEncoded) / 100;
-	// Serial monitor
-	Serial.print("Thay doi: ");
-	Serial.println(encoderValue - lastEncoded);
-	Serial.print("Van toc: ");
-	Serial.println(vanToc);
-	Serial.print("Value: ");
-	Serial.println(encoderValue);
-	// LCD
-	lcd.clear();
-	lcd.setCursor(0, 0);
-	lcd.print("Van Toc: ");
-	lcd.setCursor(0, 1);
-	lcd.print(vanToc);
+void loop() {
+    vongQuay = position / motVongQuay;
 
-	lastEncoded = encoderValue;
-	delay(500);
+    float vongQuayThayDoi = (position - lastPosition) / (float)motVongQuay;
+    vanToc = (vongQuayThayDoi / (delayTime / 60000.0));
+
+
+    Serial.print("So vong quay: ");
+    Serial.println(vongQuay);
+
+    Serial.print("Van toc: ");
+    Serial.print(vanToc);
+    Serial.println(" v/p");
+
+    Serial.print("Position: ");
+    Serial.println(position);
+
+    lastPosition = position;
+    delay(delayTime);
 }
 
-void updateEncoder()
-{
-	int AA = digitalRead(pinA);
-	int BB = digitalRead(pinB);
+// Hàm xử lý ngắt
+void readEncoder() {
+    int currentA = digitalRead(PIN_A);
+    int currentB = digitalRead(PIN_B);
 
-	if ((AA == 1 && BB == 1) || (AA == 0 && BB == 0))
-		encoderValue++;
-	else
-		encoderValue--;
+    // Xác định hướng quay
+    if (currentA != lastA) {     // Nếu A thay đổi
+        if (currentA == HIGH) {  // Cạnh lên của Channel A
+            if (currentB == LOW) {
+                position++;  // Quay thuận
+            } else {
+                position--;  // Quay ngược
+            }
+        } else {  // Cạnh xuống của Channel A
+            if (currentB == HIGH) {
+                position++;  // Quay thuận
+            } else {
+                position--;  // Quay ngược
+            }
+        }
+    }
+
+    lastA = currentA;  // Cập nhật trạng thái trước đó
 }
