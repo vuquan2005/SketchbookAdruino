@@ -1,5 +1,8 @@
 #include <LiquidCrystal_I2C.h>
 
+// SDA: A4
+// SCL: A5
+
 // Khởi tạo đối tượng có tê lcd với địa chỉ I2C 0x27
 // 16 cột và 2 dòng
 LiquidCrystal_I2C lcd(0x27, 16, 2);
