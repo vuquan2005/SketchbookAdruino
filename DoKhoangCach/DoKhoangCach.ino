@@ -2,14 +2,14 @@ const int trig = 8;  // chân trig của HC-SR04
 const int echo = 7;  // chân echo của HC-SR04
 
 void setup() {
-  Serial.begin(9600);     // giao tiếp Serial với baudrate 9600
+  Serial.begin(9600);
   pinMode(trig, OUTPUT);  // chân trig sẽ phát tín hiệu
   pinMode(echo, INPUT);   // chân echo sẽ nhận tín hiệu
 }
 
 void loop() {
   unsigned long duration;  // biến đo thời gian
-  int distance;            // biến lưu khoảng cách
+  float distance;            // biến lưu khoảng cách
 
   /* Phát xung từ chân trig */
   digitalWrite(trig, 0);  // tắt chân trig
@@ -22,7 +22,8 @@ void loop() {
   // Đo độ rộng xung HIGH ở chân echo.
   duration = pulseIn(echo, HIGH);
   // Tính khoảng cách đến vật.
-  distance = int(duration / 2 / 29.412);
+  // Khoảng cách bằng (thời gian * tốc độ âm thanh (343 cm/us)) chia 2 (vì tín hiệu đi và về)
+  distance = (duration * 0.0343) / 2;
 
   /* In kết quả ra Serial Monitor */
   Serial.print(distance);
