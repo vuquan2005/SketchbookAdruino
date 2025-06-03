@@ -57,7 +57,3 @@ void updateDem()
 // Nâu VCC: 5V
 // Xanh GND: GND
 // Đen Output: 8
-
-// LCD:
-// SDA A4
-// SCL A5
