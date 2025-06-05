@@ -1,14 +1,14 @@
 #include <LiquidCrystal_I2C.h>
 
-const int trig = 8;
-const int echo = 7;
-
 /* data sheet: HC - SR04
 	Max range: 4m
 	Min range: 2cm
 	Trigger Input Signal: 10uS TTL pulse 
 	Echo Output Signal: Input TTL lever signal and the range in proportion 
 */
+
+const int trig = 8;
+const int echo = 7;
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 

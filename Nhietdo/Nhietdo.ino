@@ -2,6 +2,13 @@
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
+/* datasheet: NTC 10KΩ 3950 Temperature Probe
+	Resistance at 25°C: 10KΩ ±1%.
+	B25/50: 3950 ±1%.
+	Thermal time constant: 15 seconds.
+	Thermistor temperature range: -20°C to 125°C.
+*/
+
 const int ntcPin = A0;
 const float beta = 3950;
 const float r1 = 11000;

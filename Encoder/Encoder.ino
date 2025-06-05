@@ -1,7 +1,8 @@
 #include <LiquidCrystal_I2C.h>
 
-#define PIN_A 2  // Xanh
-#define PIN_B 3  // Trắng
+// Xanh và trắng là 2 chân tín hiệu
+#define PIN_A 2
+#define PIN_B 3
 
 volatile long viTri = 0;
 int lastA = 0;
@@ -31,7 +32,6 @@ void loop() {
 
     float vongQuayThayDoi = (viTri - viTriCu) / (float)motVongQuay;
     vanToc = (vongQuayThayDoi / (delayTime / 60000.0));
-
 
     // Serial.print("So vong quay: ");
     // Serial.println(vongQuay);
