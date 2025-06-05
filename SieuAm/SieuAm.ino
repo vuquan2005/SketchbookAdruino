@@ -1,46 +1,53 @@
 #include <LiquidCrystal_I2C.h>
 
-const int trig = 8;  // chân trig của HC-SR04
-const int echo = 7;  // chân echo của HC-SR04
+const int trig = 8;
+const int echo = 7;
+
+/* data sheet: HC - SR04
+	Max range: 4m
+	Min range: 2cm
+	Trigger Input Signal: 10uS TTL pulse 
+	Echo Output Signal: Input TTL lever signal and the range in proportion 
+*/
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 void setup() {
-    Serial.begin(9600);
-    pinMode(trig, OUTPUT);  // chân trig sẽ phát tín hiệu
-    pinMode(echo, INPUT);   // chân echo sẽ nhận tín hiệu
+    pinMode(trig, OUTPUT);
+    pinMode(echo, INPUT);
 
-	lcd.init();
-	lcd.backlight();
+    Serial.begin(9600);
+
+    lcd.init();
+    lcd.backlight();
 }
 
 void loop() {
-    unsigned long duration;  // biến đo thời gian
-    float distance;          // biến lưu khoảng cách
+    int duration;
+    int distance;
 
-    /* Phát xung từ chân trig */
-    digitalWrite(trig, 0);  // tắt chân trig
+    // Phát xung 10uS trên chân trig theo datasheet
+    digitalWrite(trig, 0);
     delayMicroseconds(2);
-    digitalWrite(trig, 1);  // phát xung từ chân trig
-    delayMicroseconds(5);   // xung có độ dài 5 microSeconds
-    digitalWrite(trig, 0);  // tắt chân trig
+    digitalWrite(trig, 1);
+    delayMicroseconds(10);
+    digitalWrite(trig, 0);
 
-    /* Tính toán thời gian */
-    // Đo độ rộng xung HIGH ở chân echo.
-    duration = pulseIn(echo, HIGH);
-    // Tính khoảng cách đến vật.
+    // Vì chân echo sẽ ở mức 1 cho đến khi sóng quay lại
+	// Độ rộng xung dương trên chân echo
+    duration = pulseIn(echo, 1);
     // Khoảng cách bằng (thời gian * tốc độ âm thanh (343 cm/us)) chia 2 (vì tín hiệu đi và về)
-    distance = (duration * 0.0343) / 2;
+    // distance = (duration * 0.0343) / 2;
+    // Theo datasheet thì uS / 58 = centimeters
+    distance = duration / 58.0;
 
-    // In kết quả ra Serial Monitor
     Serial.print(distance);
     Serial.println("cm");
 
-	// In kết quả ra LCD
-	lcd.setCursor(0, 0);
-	lcd.print("Khoang cach: ");
-	lcd.setCursor(0, 1);
-	lcd.print(distance, 2);
+    lcd.setCursor(0, 0);
+    lcd.print("Khoang cach: ");
+    lcd.setCursor(0, 1);
+    lcd.print(distance, 2);
     lcd.print(" cm");
 
     delay(500);
