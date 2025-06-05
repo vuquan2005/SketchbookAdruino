@@ -28,8 +28,7 @@ void loop() {
     // Serial.print("Số đếm: ");
     // Serial.println(dem);
 
-	lcd.clear();
-	lcd.setCursor(0, 0);
+    lcd.setCursor(0, 0);
     lcd.print("DEM SO LUONG");
     lcd.setCursor(0, 1);
     lcd.print("SO LUONG: ");
@@ -42,7 +41,6 @@ void updateDem() {
     giatri = digitalRead(cambien);
 
     if (giatri != giaTriCu) {
-
         if (giatri == 0) {
             dem++;
         }

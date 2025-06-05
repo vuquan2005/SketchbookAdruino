@@ -36,8 +36,12 @@ void loop() {
         // Chỉ tare một lần duy nhất
         if (isTare) {
             lcd.setCursor(0, 0);
+            lcd.print("Tare.           ");
+            delay(200);
+            lcd.print("Tare..          ");
+            delay(200);
             lcd.print("Tare...         ");
-            delay(500);
+            delay(200);
             scale.tare(10);
             isTare = false;
         }

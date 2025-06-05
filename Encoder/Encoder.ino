@@ -1,5 +1,8 @@
 #include <LiquidCrystal_I2C.h>
 
+/* datasheet: 
+
+*/
 // Xanh và trắng là 2 chân tín hiệu
 #define PIN_A 2
 #define PIN_B 3

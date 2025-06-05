@@ -47,6 +47,7 @@ void loop() {
     lcd.setCursor(0, 0);
     lcd.print("Khoang cach: ");
     lcd.setCursor(0, 1);
+	lcd.print("                ");
     lcd.print(khoangCach, 2);
     lcd.print(" cm");
 
