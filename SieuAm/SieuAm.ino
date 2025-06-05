@@ -23,8 +23,8 @@ void setup() {
 }
 
 void loop() {
-    int duration;
-    int distance;
+    int thoiGian;
+    int khoangCach;
 
     // Phát xung 10uS trên chân trig theo datasheet
     digitalWrite(trig, 0);
@@ -35,19 +35,19 @@ void loop() {
 
     // Vì chân echo sẽ ở mức 1 cho đến khi sóng quay lại
 	// Độ rộng xung dương trên chân echo
-    duration = pulseIn(echo, 1);
+    thoiGian = pulseIn(echo, 1);
     // Khoảng cách bằng (thời gian * tốc độ âm thanh (343 cm/us)) chia 2 (vì tín hiệu đi và về)
-    // distance = (duration * 0.0343) / 2;
+    // khoangCach = (thoiGian * 0.0343) / 2;
     // Theo datasheet thì uS / 58 = centimeters
-    distance = duration / 58.0;
+    khoangCach = thoiGian / 58.0;
 
-    Serial.print(distance);
+    Serial.print(khoangCach);
     Serial.println("cm");
 
     lcd.setCursor(0, 0);
     lcd.print("Khoang cach: ");
     lcd.setCursor(0, 1);
-    lcd.print(distance, 2);
+    lcd.print(khoangCach, 2);
     lcd.print(" cm");
 
     delay(500);
