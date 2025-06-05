@@ -48,7 +48,7 @@ void loop() {
 
         lcd.setCursor(0, 0);
         lcd.print("Dang can...    ");
-        delay(1000);
+        delay(500);
         float canNang = scale.get_units(10);
 
         lcd.setCursor(0, 0);
