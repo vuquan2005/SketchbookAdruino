@@ -2,3 +2,6 @@
 /Rung
 /DoLuuLuongNuoc
 /DoMucNuoc
+*.bin
+*.eep
+*.ino.with_bootloader.hex
