@@ -1,16 +1,18 @@
 #include <LiquidCrystal_I2C.h>
 
 /* datasheet: 
+Green = A phase | White= B phase
+Red = Vcc positive power supply | Black = Vo (Ground)
+
 
 */
-// Xanh và trắng là 2 chân tín hiệu
+// 2 chân phải hỗ trợ ngắt
 #define PIN_A 2
 #define PIN_B 3
 
 volatile long viTri = 0;
-int lastA = 0;
 
-int motVongQuay = 800;
+int motVongQuay = 400;
 float vongQuay = 0;
 
 float vanToc = 0;
@@ -23,9 +25,10 @@ void setup() {
     pinMode(PIN_A, INPUT_PULLUP);
     pinMode(PIN_B, INPUT_PULLUP);
 
-    attachInterrupt(digitalPinToInterrupt(PIN_A), readEncoder, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(PIN_A), ngatA, RISING);
+    attachInterrupt(digitalPinToInterrupt(PIN_B), ngatB, RISING);
 
-    // Serial.begin(9600);
+    Serial.begin(9600);
     lcd.init();
     lcd.backlight();
 }
@@ -36,13 +39,13 @@ void loop() {
     float vongQuayThayDoi = (viTri - viTriCu) / (float)motVongQuay;
     vanToc = (vongQuayThayDoi / (delayTime / 60000.0));
 
-    // Serial.print("So vong quay: ");
-    // Serial.println(vongQuay);
-    // Serial.print("Van toc: ");
-    // Serial.print(vanToc);
-    // Serial.println(" v/p");
-    // Serial.print("Position: ");
-    // Serial.println(position);
+    Serial.print("So vong quay: ");
+    Serial.println(vongQuay);
+    Serial.print("Van toc: ");
+    Serial.print(vanToc);
+    Serial.println(" v/p");
+    Serial.print("Position: ");
+    Serial.println(viTri);
 
     lcd.clear();
     lcd.setCursor(0, 0);
@@ -56,20 +59,18 @@ void loop() {
     delay(delayTime);
 }
 
-void readEncoder() {
-    int currentA = digitalRead(PIN_A);
-    int currentB = digitalRead(PIN_B);
-
-    // Nếu A thay đổi
-    if (currentA != lastA) {
-        if (currentA == 1 && currentB == 0 || currentA == 0 && currentB == 1) {
-            // A lên, B xuống hoặc A xuống, B lên => thuận
-            viTri++;
-        } else {
-            // A lên, B lên hoặc A xuống, B xuống => ngược
-            viTri--;
-        }
+void ngatA() {
+    if (digitalRead(PIN_B) == LOW) {
+        viTri++;
+    } else {
+        viTri--;
     }
+}
 
-    lastA = currentA;
+void ngatB() {
+    if (digitalRead(PIN_A) == LOW) {
+        viTri--;
+    } else {
+        viTri++;
+    }
 }
