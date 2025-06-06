@@ -5,8 +5,9 @@
       "includePath": [
         "C:\\Users\\VuQuan\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino/**",
         "C:\\Users\\VuQuan\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\standard/**",
-        "D:\\Edu\\Sketchbook\\libraries/**",
-        "D:\\Edu\\test\\aaa/**"
+        "C:\\Users\\VuQuan\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src/**",
+        "C:\\Users\\VuQuan\\Documents\\Arduino\\libraries/**",
+        "${workspaceFolder}/**"
       ],
       "forcedInclude": [
         "C:\\Users\\VuQuan\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino\\Arduino.h"
@@ -34,9 +35,8 @@
         "-DARDUINO_ARCH_AVR",
         "-IC:\\Users\\VuQuan\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
         "-IC:\\Users\\VuQuan\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\standard",
-        "d:\\Edu\\test\\aaa\\build\\sketch\\aaa.ino.cpp",
-        "-o",
-        "d:\\Edu\\test\\aaa\\build\\sketch\\aaa.ino.cpp.o"
+        "-IC:\\Users\\VuQuan\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\libraries\\Wire\\src",
+        "-o"
       ],
       "defines": [
         "F_CPU=16000000L",
