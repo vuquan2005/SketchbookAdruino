@@ -1,10 +1,10 @@
 #include <LiquidCrystal_I2C.h>
 
-/* datasheet: 
-Green = A phase | White= B phase
-Red = Vcc positive power supply | Black = Vo (Ground)
-
-
+/* datasheet: LPD3806-400BM-G5-24C
+	Green = A phase | White= B phase
+	Red = Vcc positive power supply | Black = Vo (Ground)
+	resolution (P/R): 400
+	operating application: DC5-24V
 */
 // 2 chân phải hỗ trợ ngắt
 #define PIN_A 2
