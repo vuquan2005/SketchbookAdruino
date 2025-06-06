@@ -1,69 +1,82 @@
 #include <LiquidCrystal_I2C.h>
-#include <HX711.h>
 
-// LoadCell - HX711
-// Đỏ E+
-// Đen E-
-// Trắng A-
-// Xanh A+
+/* datasheet: 
+Green = A phase | White= B phase
+Red = Vcc positive power supply | Black = Vo (Ground)
 
-const int DOUT_PIN = 7;
-const int SCK_PIN = 8;
 
-HX711 scale;
-// Chưa có quả nặng + bàn cân nên để tạm 0.42 (LoadCell 50kg wokwi)
-float hieuChinhScale = 0.42;
-bool isTare = true;
+*/
+// 2 chân phải hỗ trợ ngắt
+#define PIN_A 2
+#define PIN_B 3
+
+volatile long viTri = 0;
+
+int motVongQuay = 5200;
+float vongQuay = 0;
+
+float vanToc = 0;
+long viTriCu = 0;
+const int delayTime = 100;
+unsigned long lastTime;
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 void setup() {
+    pinMode(PIN_A, INPUT_PULLUP);
+    pinMode(PIN_B, INPUT_PULLUP);
+
+    attachInterrupt(digitalPinToInterrupt(PIN_A), ngatA, RISING);
+    attachInterrupt(digitalPinToInterrupt(PIN_B), ngatB, RISING);
+
+    Serial.begin(9600);
     lcd.init();
     lcd.backlight();
-
-    // Khởi tạo HX711
-    scale.begin(DOUT_PIN, SCK_PIN);
-    // Set tỷ lệ scale ban đầu
-    scale.set_scale(hieuChinhScale);
+    lastTime = millis();
 }
 
 void loop() {
-    if (scale.is_ready()) {
-        // Xoá dòng số 2 lcd
-        lcd.setCursor(0, 1);
-        lcd.print("                ");
+    unsigned long currentTime = millis();
+    const long viTriHienTai = viTri;
 
-        // Chỉ tare một lần duy nhất
-        if (isTare) {
-            lcd.setCursor(0, 0);
-            lcd.print("Tare.           ");
-            delay(200);
-            lcd.setCursor(0, 0);
-            lcd.print("Tare..          ");
-            delay(200);
-            lcd.setCursor(0, 0);
-            lcd.print("Tare...         ");
-            delay(200);
-            scale.tare(10);
-            isTare = false;
-        }
+    vongQuay = viTriHienTai / (float)motVongQuay;
 
-        lcd.setCursor(0, 0);
-        lcd.print("Dang can...    ");
-        delay(1000);
-        float canNang = scale.get_units(10);
+    float vongQuayThayDoi = (viTriHienTai - viTriCu) / (float)motVongQuay;
+    vanToc = (vongQuayThayDoi / ((currentTime - lastTime) / 60000.0));
 
-        lcd.setCursor(0, 0);
-        lcd.print("Can duoc:       ");
-        lcd.setCursor(0, 1);
-        lcd.print(canNang);
+    Serial.print("So vong quay: ");
+    Serial.println(vongQuay);
+    Serial.print("Van toc: ");
+    Serial.print(vanToc);
+    Serial.println(" v/p");
+    Serial.print("Position: ");
+    Serial.println(viTri);
 
-        delay(1500);
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("So vong: ");
+    lcd.print(vongQuay);
+    lcd.setCursor(0, 1);
+    lcd.print("Van toc: ");
+    lcd.print(vanToc, 2);
+
+    viTriCu = viTriHienTai;
+    lastTime = currentTime;
+    delay(delayTime);
+}
+
+void ngatA() {
+    if (digitalRead(PIN_B) == LOW) {
+        viTri++;
     } else {
-        lcd.setCursor(0, 0);
-        lcd.print("HX711");
-        lcd.setCursor(0, 1);
-        lcd.print("Khong san sang");
+        viTri--;
     }
-    delay(100);
+}
+
+void ngatB() {
+    if (digitalRead(PIN_A) == LOW) {
+        viTri--;
+    } else {
+        viTri++;
+    }
 }
