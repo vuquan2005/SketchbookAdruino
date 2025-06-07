@@ -12,8 +12,9 @@
 
 volatile long viTri = 0;
 
-int motVongQuay = 400;
-float vongQuay = 0;
+// Gấp đôi độ phân giải do cách đọc encoder
+int doPhanGiai = 800; 
+float soVongQuay = 0;
 
 float vanToc = 0;
 long viTriCu = 0;
@@ -34,13 +35,13 @@ void setup() {
 }
 
 void loop() {
-    vongQuay = viTri / (float)motVongQuay;
+    soVongQuay = viTri / (float)doPhanGiai;
 
-    float vongQuayThayDoi = (viTri - viTriCu) / (float)motVongQuay;
+    float vongQuayThayDoi = (viTri - viTriCu) / (float)doPhanGiai;
     vanToc = (vongQuayThayDoi / (delayTime / 60000.0));
 
     Serial.print("So vong quay: ");
-    Serial.println(vongQuay);
+    Serial.println(soVongQuay);
     Serial.print("Van toc: ");
     Serial.print(vanToc);
     Serial.println(" v/p");
@@ -50,7 +51,7 @@ void loop() {
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("So vong: ");
-    lcd.print(vongQuay);
+    lcd.print(soVongQuay);
     lcd.setCursor(0, 1);
     lcd.print("Van toc: ");
     lcd.print(vanToc, 2);
