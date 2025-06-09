@@ -20,6 +20,8 @@ void setup() {
 
     lcd.init();
     lcd.backlight();
+	lcd.setCursor(0, 0);
+    lcd.print("Khoang cach: ");
 }
 
 void loop() {
@@ -44,11 +46,8 @@ void loop() {
     Serial.print(khoangCach);
     Serial.println("cm");
 
-    lcd.setCursor(0, 0);
-    lcd.print("Khoang cach: ");
     lcd.setCursor(0, 1);
-	lcd.print("                ");
-    lcd.print(khoangCach, 2);
+    lcd.print(khoangCach);
     lcd.print(" cm");
 
     delay(500);

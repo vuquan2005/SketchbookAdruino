@@ -34,10 +34,10 @@ void loop() {
     // Serial.print(tC);
     // Serial.println(" *C");
 
+	lcd.print("                ");
     lcd.setCursor(0, 0);
     lcd.print("Nhiet do:");
     lcd.setCursor(0, 1);
-	lcd.print("                ");
     lcd.print(tC, 2);
     lcd.print(" C");
 
