@@ -5,3 +5,4 @@
 *.bin
 *.eep
 *.ino.with_bootloader.hex
+/TestWokwi
